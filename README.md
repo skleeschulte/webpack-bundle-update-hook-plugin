@@ -44,6 +44,14 @@ Then use [webpack's Node.js API](https://webpack.github.io/docs/node.js-api.html
         console.log('removed modules: ', removedModules);
     });
 
+## Options
+
+### debug
+
+Debug output can be enabled by setting the debug flag in the plugin options to true:
+
+    new BundleUpdateHookPlugin({ debug: true })
+
 ## License
 
 MIT (see LICENSE file)
