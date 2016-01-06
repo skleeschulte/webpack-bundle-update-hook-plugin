@@ -2,7 +2,7 @@
 
 Add a tapable 'bundle-update' hook to webpack. On bundle updates registered plugins get lists of new, changed and removed modules.
 
-This plugin can be useful in combination with [webpack-dev-middleware](https://github.com/webpack/webpack-dev-middleware) or [webpack-dev-server](https://github.com/webpack/webpack-dev-server). The plugin adds a new hook `bundle-update` to which other plugins can register. After each bundle update, registered plugins receive lists of new, changed and removed files.
+This plugin can be useful in combination with [webpack-dev-middleware](https://github.com/webpack/webpack-dev-middleware) or [webpack-dev-server](https://github.com/webpack/webpack-dev-server). The plugin adds a new hook `bundle-update` to which other plugins can register. After each bundle update, registered plugins receive lists of new, changed and removed files. These can for example be used for server side hot module reloading.
 
 ## Installation
 
@@ -43,6 +43,14 @@ Then use [webpack's Node.js API](https://webpack.github.io/docs/node.js-api.html
         console.log('changed modules: ', changedModules);
         console.log('removed modules: ', removedModules);
     });
+
+Note: The `bundle-update` event will only be emitted if there was a change (a module added, changed or removed). Thus, the event will never be emitted after the first build.
+
+## How it works
+
+The plugin hooks into the [webpack compiler's `done` hook](https://webpack.github.io/docs/plugins.html#the-compiler-instance). The `done` event is fired whenever webpack has finished a build. The callback function receives a `stats` object which contains a list of all the modules in the current bundle in `stats.compilation.modules`. Each module has (among others) an `id` property and a `buildTimestamp` property. Resource modules (non webpack internal modules) also have a `resource` property.
+
+On each `done` event, the plugin generates a list of module ids and buildTimestamps, skipping modules that don't have a resource property. For the first build, nothing else is done. For subsequent builds, the previous list is compared to the current list: missing module ids on the old list identify new modules, missing module ids on the new list identify removed modules, same module id and different buildTimestamp identifies changed modules.
 
 ## Options
 
