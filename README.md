@@ -1,5 +1,7 @@
 # webpack-bundle-update-hook-plugin
 
+[![Build Status](https://travis-ci.org/skleeschulte/webpack-bundle-update-hook-plugin.svg?branch=master)](https://travis-ci.org/skleeschulte/webpack-bundle-update-hook-plugin)
+
 Add a tapable 'bundle-update' hook to webpack. On bundle updates registered plugins get lists of new, changed and removed modules.
 
 This plugin can be useful in combination with [webpack-dev-middleware](https://github.com/webpack/webpack-dev-middleware) or [webpack-dev-server](https://github.com/webpack/webpack-dev-server). The plugin adds a new hook `bundle-update` to which other plugins can register. After each bundle update, registered plugins receive lists of new, changed and removed files. These can for example be used for server side hot module reloading.
