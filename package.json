@@ -2,7 +2,7 @@
   "name": "webpack-bundle-update-hook-plugin",
   "version": "1.0.1",
   "description": "Add a tapable 'bundle-update' hook to webpack. On bundle updates registered plugins get lists of new, changed and removed modules.",
-  "main": "index.js",
+  "main": "src/plugin.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/skleeschulte/webpack-bundle-update-hook-plugin.git"
