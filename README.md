@@ -32,10 +32,11 @@ Then use [webpack's Node.js API](https://webpack.github.io/docs/node.js-api.html
 
     var compiler = webpack(webpackConfig);
 
-    compiler.plugin('bundle-update', function (newModules, changedModules, removedModules, stats) {
-        // newModules, changedModules and removedModules are objects. The properties of the objects
-        // are module ids, the values of these properties are the corresponding module resources
-        // (= absolute module paths).
+    compiler.plugin('bundle-update',
+                    function (newModules, changedModules, removedModules, stats) {
+        // newModules, changedModules and removedModules are objects. The properties
+        // of the objects are module ids, the values of these properties are the
+        // corresponding module resources (= absolute module paths).
 
         // stats is passed as is from the compilers 'done' plugin hook.
 
@@ -59,6 +60,11 @@ On each `done` event, the plugin generates a list of module ids and buildTimesta
 Debug output can be enabled by setting the debug flag in the plugin options to true:
 
     new BundleUpdateHookPlugin({ debug: true })
+
+## Run tests
+
+    npm install
+    npm test
 
 ## License
 
