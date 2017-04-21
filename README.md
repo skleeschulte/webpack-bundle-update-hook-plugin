@@ -47,7 +47,7 @@ Then use [webpack's Node.js API](https://webpack.js.org/api/node/) to get a comp
         console.log('removed modules: ', removedModules);
     });
 
-Note: The `bundle-update` event will only be emitted if there was a change (a module added, changed or removed). Thus, the event will never be emitted after the first build. However, Webpack may emit multiple builds in watch mode even if no files change. This means that the `bundle-update` event can be emitted before any files change.
+Note: The `bundle-update` event will only be emitted if there was a change (a module added, changed or removed). Thus, the event will never be emitted after the first build. However, Webpack may emit multiple builds in watch mode even if no files change. This means that the `bundle-update` event can be emitted before any files change. See [watchpack issue #25](https://github.com/webpack/watchpack/issues/25) for an example of such a scenario.
 
 ## How it works
 
