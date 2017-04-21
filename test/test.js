@@ -33,11 +33,37 @@ webpackCompiler.plugin('bundle-update', function (newModules, changedModules, re
     webpackEmitter.emit('bundle-update', newModules, changedModules, removedModules, stats);
 });
 
+// webpack watch options - use polling so tests don't rely on native fs watcher
+var watchOptions = {
+    poll: true
+};
+var watcher;
+
 describe('webpack-bundle-update-hook-plugin', function () {
 
-    // give the file watcher plenty of time to detect changes
+    // give the file watcher plenty of time to detect changes + set the timeout to a higher value than the timeout in
+    // the before hook
     this.slow(1000);
-    this.timeout(5000);
+    this.timeout(14000);
+
+    before(function(done) {
+        // Wait for the first build(s) to finish. This can take up to 10 seconds:
+        // https://github.com/webpack/watchpack/issues/25
+        var timeout = setTimeout(function() {
+            console.log("timeout");
+            done();
+        }, 12000);
+
+        var watcherCallback = function (err, stats) {
+            // If there is an error while waiting, clear the timeout and return the error
+            if (err) {
+                clearTimeout(timeout);
+                return done(err);
+            }
+        };
+
+        watcher = webpackCompiler.watch(watchOptions, watcherCallback);
+    });
 
     it('should emit new and changed modules when require statements (and thus modules) are added', function (done) {
         var bundleUpdateListener = function (newModules, changedModules, removedModules) {
