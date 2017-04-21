@@ -24,9 +24,12 @@
   "author": "Stefan Kleeschulte",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^3.4.1",
-    "memory-fs": "^0.3.0",
-    "mocha": "^2.3.4",
-    "webpack": "^1.12.10"
+    "chai": "^3.5.0",
+    "memory-fs": "^0.4.1",
+    "mocha": "^3.2.0",
+    "webpack": "^1.12.10 || ^2.0.0"
+  },
+  "peerDependencies": {
+    "webpack": "^1.12.10 || ^2.0.0"
   }
 }
