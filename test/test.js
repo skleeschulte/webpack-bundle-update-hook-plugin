@@ -33,47 +33,11 @@ webpackCompiler.plugin('bundle-update', function (newModules, changedModules, re
     webpackEmitter.emit('bundle-update', newModules, changedModules, removedModules, stats);
 });
 
-// webpack watch options - use polling so tests don't rely on native fs watcher
-var watchOptions = {
-    poll: true
-};
-var watcher;
-
 describe('webpack-bundle-update-hook-plugin', function () {
 
     // give the file watcher plenty of time to detect changes
     this.slow(1000);
     this.timeout(5000);
-
-    it('should not emit bundle-update event on first build', function (done) {
-        var bundleUpdateEventEmitted = false;
-        var bundleUpdateListener = function () {
-            bundleUpdateEventEmitted = true;
-        }
-        webpackEmitter.once('bundle-update', bundleUpdateListener);
-
-        var watcherCallbackInvocations = 0;
-        var watcherCallback = function (err, stats) {
-            watcherCallbackInvocations++;
-            if (watcherCallbackInvocations > 2) return;
-
-            if (err) return done(err);
-
-            if (bundleUpdateEventEmitted) {
-                var errorMsg = 'bundle-update event was emitted on first build';
-                return done(new Error(errorMsg));
-            }
-
-            // watcher callback will be invoked twice on initial run, so skip
-            // first run...
-            if (watcherCallbackInvocations === 2) {
-                webpackEmitter.removeListener('bundle-update', bundleUpdateListener);
-                done();
-            }
-        }
-
-        watcher = webpackCompiler.watch(watchOptions, watcherCallback);
-    });
 
     it('should emit new and changed modules when require statements (and thus modules) are added', function (done) {
         var bundleUpdateListener = function (newModules, changedModules, removedModules) {
@@ -88,7 +52,7 @@ describe('webpack-bundle-update-hook-plugin', function () {
             assert.deepEqual(removedModules, {});
 
             done();
-        }
+        };
         webpackEmitter.once('bundle-update', bundleUpdateListener);
 
         testSrc.addModule('module.js');
@@ -105,7 +69,7 @@ describe('webpack-bundle-update-hook-plugin', function () {
             assert.deepEqual(removedModules, {});
 
             done();
-        }
+        };
         webpackEmitter.once('bundle-update', bundleUpdateListener);
 
         testSrc.updateModuleSrc('module.js', 'var x = 1;');
@@ -124,7 +88,7 @@ describe('webpack-bundle-update-hook-plugin', function () {
             assert.equal(removedModules[removedModulesIds[0]], testSrc.getModulePath('module.js'));
 
             done();
-        }
+        };
         webpackEmitter.once('bundle-update', bundleUpdateListener);
 
         testSrc.removeModule('module.js');
